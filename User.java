@@ -1,30 +1,37 @@
+package com.example.workshop1.models;
+
 import javax.persistence.*;
 
-@Entity(name = "demos")
+@Entity
+@Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
+
+    private String email;
 
     private String username;
 
-    @Enumerated(EnumType.STRING)
-    private AccountType type;
+    private String password;
 
-    public User() {
-    }
+    public User() {}
 
-    public User(String username, AccountType type) {
-        this.username = username;
-        this.type = type;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {
@@ -35,11 +42,11 @@ public class User {
         this.username = username;
     }
 
-    public AccountType getType() {
-        return type;
+    public String getPassword() {
+        return password;
     }
 
-    public void setType(AccountType type) {
-        this.type = type;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
