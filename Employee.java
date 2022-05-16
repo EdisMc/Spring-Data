@@ -1,38 +1,36 @@
-package entities;
+package com.example.workshop1.models;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.Objects;
 
 @Entity
 @Table(name = "employees")
 public class Employee {
-    private Integer id;
-    private String firstName;
-    private String lastName;
-    private String middleName;
-    private String jobTitle;
-    private Department department;
-    private Employee manager;
-    private LocalDateTime hireDate;
-    private BigDecimal salary;
-    private Address address;
-    private Set<Project> projects;
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employee_id")
-    public Integer getId() {
+    private long id;
+
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
+    private int age;
+
+    @ManyToOne
+    private Project project;
+
+    public Employee() {}
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -41,7 +39,6 @@ public class Employee {
         this.firstName = firstName;
     }
 
-    @Column(name = "last_name")
     public String getLastName() {
         return lastName;
     }
@@ -50,82 +47,32 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    @Column(name = "middle_name")
-    public String getMiddleName() {
-        return middleName;
+    public int getAge() {
+        return age;
     }
 
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    @Column(name = "job_title")
-    public String getJobTitle() {
-        return jobTitle;
+    public Project getProject() {
+        return project;
     }
 
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "department_id", referencedColumnName = "department_id")
-    public Department getDepartment() {
-        return department;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id == employee.id;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
-
-    @ManyToOne
-    @JoinColumn(name = "manager_id", referencedColumnName = "employee_id")
-    public Employee getManager() {
-        return manager;
-    }
-
-    public void setManager(Employee manager) {
-        this.manager = manager;
-    }
-
-    @Column(name = "hire_date")
-    public LocalDateTime getHireDate() {
-        return hireDate;
-    }
-
-    public void setHireDate(LocalDateTime hireDate) {
-        this.hireDate = hireDate;
-    }
-
-    @Column(name = "salary")
-    public BigDecimal getSalary() {
-        return salary;
-    }
-
-    public void setSalary(BigDecimal salary) {
-        this.salary = salary;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    @ManyToMany
-    @JoinTable(name = "employees_projects",
-            joinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "project_id"))
-    public Set<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
-    }
-
 }
