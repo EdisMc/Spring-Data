@@ -1,46 +1,22 @@
-package com.example.gamestore.entities.users;
-
-import com.example.gamestore.entities.Game;
-import com.example.gamestore.entities.Order;
-
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
-@Entity(name = "users")
+@Entity(name = "demos")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
-    private String email;
+    private String username;
 
-    @Column(nullable = false)
-    private String password;
-
-    @Column(name = "full_name", nullable = false)
-    private String fullName;
-
-    private boolean admin;
-
-    @ManyToMany
-    private Set<Game> games;
-
-    @OneToMany(targetEntity = Order.class, mappedBy = "buyer")
-    private Set<Order> orders;
+    @Enumerated(EnumType.STRING)
+    private AccountType type;
 
     public User() {
-        this.games = new HashSet<>();
-        this.orders = new HashSet<>();
     }
 
-    public User(String email, String password, String fullName) {
-        this();
-
-        this.email = email;
-        this.password = password;
-        this.fullName = fullName;
+    public User(String username, AccountType type) {
+        this.username = username;
+        this.type = type;
     }
 
     public int getId() {
@@ -51,51 +27,19 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public AccountType getType() {
+        return type;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
-
-    public Set<Game> getGames() {
-        return games;
-    }
-
-    public void setGames(Set<Game> games) {
-        this.games = games;
-    }
-
-    public Set<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
+    public void setType(AccountType type) {
+        this.type = type;
     }
 }
