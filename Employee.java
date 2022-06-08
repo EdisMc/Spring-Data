@@ -1,33 +1,44 @@
-package com.example.workshop1.models;
+package bg.softuni.model_mapper.entities;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
-@Entity
-@Table(name = "employees")
+@Entity(name = "employees")
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
     private String lastName;
 
-    private int age;
+    private BigDecimal salary;
+    private LocalDate birthday;
 
-    @ManyToOne
-    private Project project;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Employee manager;
 
-    public Employee() {}
+    public Employee() {
+    }
 
-    public long getId() {
+    public Employee(String firstName, String lastName, BigDecimal salary, LocalDate birthday, Employee manager) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.salary = salary;
+        this.birthday = birthday;
+        this.manager = manager;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -47,32 +58,27 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public int getAge() {
-        return age;
+    public BigDecimal getSalary() {
+        return salary;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
     }
 
-    public Project getProject() {
-        return project;
+    public LocalDate getBirthday() {
+        return birthday;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return id == employee.id;
+    public Employee getManager() {
+        return manager;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public void setManager(Employee manager) {
+        this.manager = manager;
     }
 }
