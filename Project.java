@@ -1,54 +1,32 @@
-package com.example.workshop1.models;
-
-import org.hibernate.annotations.CollectionId;
+package entities;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "projects")
 public class Project {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(nullable = false)
+    private Integer id;
     private String name;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
-
-    @Column(name = "is_finished")
-    private boolean isFinished;
-
-    @Column(nullable = false)
-    private BigDecimal payment;
-
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
-
-    @ManyToOne
-    private Company company;
-
-    @OneToMany(targetEntity = Employee.class, mappedBy = "project")
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Set<Employee> employees;
 
-    public Project() {
-        this.employees = new HashSet<>();
-    }
-
-    public long getId() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "project_id")
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -57,6 +35,7 @@ public class Project {
         this.name = name;
     }
 
+    @Column(name = "description",columnDefinition = "TEXT")
     public String getDescription() {
         return description;
     }
@@ -65,65 +44,30 @@ public class Project {
         this.description = description;
     }
 
-    public boolean isFinished() {
-        return isFinished;
-    }
-
-    public void setFinished(boolean finished) {
-        isFinished = finished;
-    }
-
-    public BigDecimal getPayment() {
-        return payment;
-    }
-
-    public void setPayment(BigDecimal payment) {
-        this.payment = payment;
-    }
-
-    public LocalDate getStartDate() {
+    @Column(name = "start_date")
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Company getCompany() {
-        return company;
+    @Column(name = "end_date")
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
+    @ManyToMany(mappedBy = "projects")
     public Set<Employee> getEmployees() {
         return employees;
     }
 
     public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
-    }
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", isFinished=" + isFinished +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Project project = (Project) o;
-        return id == project.id && Objects.equals(name, project.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
     }
 }
