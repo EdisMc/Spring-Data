@@ -1,97 +1,60 @@
 package entities;
 
-import annotations.Column;
-import annotations.Entity;
-import annotations.Id;
+import javax.persistence.*;
+import java.util.Set;
 
-@Entity(name = "addresses")
+@Entity
+@Table(name = "addresses")
 public class Address {
+    private Integer id;
+    private String text;
+    private Town town;
+    private Set<Employee> employees;
+
     @Id
-    @Column(name = "id")
-    private int id;
-
-    @Column(name = "street")
-    private String street;
-
-    @Column(name = "street_number")
-    private int streetNumber;
-
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "country")
-    private String county;
-
-    @Column(name = "postal_code")
-    private String postalCode;
-
-    public Address() {}
-
-    public Address(String street, int streetNumber, String city, String county, String postalCode) {
-        this.street = street;
-        this.streetNumber = streetNumber;
-        this.city = city;
-        this.county = county;
-        this.postalCode = postalCode;
-    }
-
-    public int getId() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "address_id")
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getStreet() {
-        return street;
+    @Column(name = "address_text")
+    public String getText() {
+        return text;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public int getStreetNumber() {
-        return streetNumber;
+    @ManyToOne
+    @JoinColumn(name = "town_id",referencedColumnName = "town_id")
+    public Town getTown() {
+        return town;
     }
 
-    public void setStreetNumber(int streetNumber) {
-        this.streetNumber = streetNumber;
+    public void setTown(Town town) {
+        this.town = town;
     }
 
-    public String getCity() {
-        return city;
+    @OneToMany(mappedBy = "address")
+    public Set<Employee> getEmployees() {
+        return employees;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+    public void setEmployees(Set<Employee> employees) {
+        this.employees = employees;
     }
 
     @Override
     public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", street='" + street + '\'' +
-                ", streetNumber=" + streetNumber +
-                ", city='" + city + '\'' +
-                ", county='" + county + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                '}';
+        return String.format("%s, %s - %d employees",
+            this.getText(),
+            this.getTown() == null ? "" : this.getTown().getName(),
+            this.employees.size());
     }
 }
