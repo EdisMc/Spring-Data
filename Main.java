@@ -1,45 +1,33 @@
-import entities.Address;
-import entities.User;
-import orm.EntityManager;
+import entities.Student;
+import entities.Teacher;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.time.LocalDate;
-import java.util.List;
-
-import static orm.MyConnector.createConnection;
-import static orm.MyConnector.getConnection;
 
 public class Main {
 
-    public static void main(String[] args) throws SQLException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
-        createConnection("root", "", "custom-orm");
-        Connection connection = getConnection();
+    public static void main(String[] args) {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("school");
 
-        EntityManager<User> userEntityManager = new EntityManager<>(connection);
-        EntityManager<Address> addressEntityManager = new EntityManager<>(connection);
+        EntityManager entityManager = emf.createEntityManager();
+        entityManager.getTransaction().begin();
 
-        addressEntityManager.doCreate(Address.class);
+//        Student student = new Student("emo", 22);
+//        Student second = new Student("gosho", 45);
+//        entityManager.persist(student);
+//        entityManager.persist(second);
 
-        User user = new User("pesho", 25, LocalDate.now());
-        user.setUsername("pesho_new_finalv2");
 
-//        userEntityManager.doCreate(User.class);
-//        userEntityManager.doAlter(User.class);
-        userEntityManager.persist(user);
+        Teacher teacher = new Teacher("petka", LocalDate.now());
+        entityManager.persist(teacher);
 
-        Iterable<User> first = userEntityManager.find(User.class);
-        System.out.println(first.toString());
+        teacher.setName("gergana");
+        entityManager.persist(teacher);
 
-        User toDelete = userEntityManager.findFirst(User.class, "id > 3");
-        System.out.println(toDelete);
-
-        userEntityManager.delete(toDelete);
-
-        Iterable<User> second = userEntityManager.find(User.class);
-        System.out.println(second.toString());
-
-        connection.close();
+        entityManager.getTransaction().commit();
+        entityManager.close();
     }
 }
